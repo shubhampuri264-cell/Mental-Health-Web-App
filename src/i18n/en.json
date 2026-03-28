@@ -1,0 +1,335 @@
+{
+  "appName": "MANASTHITI",
+  "appNameRoman": "MANASTHITI",
+  "tagline": "Understand the state of your mind.",
+  "beginCheckin": "Begin your check-in →",
+  "anonymous": "Anonymous",
+  "threeMinutes": "3 minutes",
+  "noLogin": "No login needed",
+  "notDiagnosis": "This is not a diagnosis. It is a first step.",
+  "next": "Next →",
+  "skipLetter": "Skip",
+  "solidarity": {
+    "feltToday": "felt exactly this today.",
+    "notAlone": "You are not alone.",
+    "continue": "Continue →"
+  },
+  "cohorts": {
+    "academic": {
+      "name": "Academic Pressure",
+      "message": "{count} young Nepalis feel exactly this today."
+    },
+    "hopelessness": {
+      "name": "Purpose & Hopelessness",
+      "message": "{count} share this with you right now."
+    },
+    "isolation": {
+      "name": "Isolation",
+      "message": "You are not alone. {count} feel this too."
+    },
+    "lowMood": {
+      "name": "General Low Mood",
+      "message": "Your mind is tired. That is real."
+    }
+  },
+  "tiers": {
+    "tier1": {
+      "heading": "You are taking care of your mind.",
+      "description": "These small practices can help you feel better.",
+      "cta": "View self-help content →",
+      "resources": [
+        {
+          "title": "Breathing Exercise",
+          "description": "A 5-minute breathing practice to reduce stress."
+        },
+        {
+          "title": "Journaling Prompt",
+          "description": "How did you feel today? Write one sentence."
+        },
+        {
+          "title": "Understanding Your Feelings",
+          "description": "Feelings are temporary. Recognizing them is the first step."
+        }
+      ]
+    },
+    "tier2": {
+      "heading": "Your mind is tired. That is real.",
+      "description": "You are not alone. These resources can help.",
+      "cta": "Set weekly check-in →",
+      "resources": [
+        {
+          "title": "Peer Stories",
+          "description": "Others like you have experienced this too."
+        },
+        {
+          "title": "7-Day Mood Guide",
+          "description": "A small daily practice to understand your mind."
+        }
+      ]
+    },
+    "tier3": {
+      "heading": "You are going through a difficult time. Support is available.",
+      "description": "Talking to someone helps. These organizations can support you.",
+      "cta": "View support contacts →",
+      "resources": [
+        {
+          "title": "TPO Nepal",
+          "description": "TPO Nepal provides free mental health support.",
+          "contact": "1660-0102005"
+        },
+        {
+          "title": "Nearest Counseling Service",
+          "description": "Contact your nearest counseling service."
+        }
+      ]
+    },
+    "tier4": {
+      "heading": "You need support right now.",
+      "description": "Please call now. You matter.",
+      "cta": "Call now",
+      "phone": "1660-0102005",
+      "orgName": "TPO Nepal",
+      "safetyMessage": "You are not alone. Help is available."
+    }
+  },
+  "letter": {
+    "prompt": "One sentence for yourself, next week.",
+    "send": "Send →",
+    "skip": "Skip",
+    "privacy": "Stored only on your device.",
+    "locked": "Opens in 7 days",
+    "unlocked": "Your letter is ready!",
+    "checkinAgain": "Check in again →",
+    "letterSaved": "Your letter has been saved!"
+  },
+  "language": {
+    "toggle": "नेपाली",
+    "current": "English"
+  },
+  "questions": {
+    "q1": {
+      "text": "Lately, does nothing feel worth doing, even things you used to like?",
+      "options": [
+        {
+          "text": "Rarely",
+          "score": 0
+        },
+        {
+          "text": "Sometimes",
+          "score": 1
+        },
+        {
+          "text": "Often",
+          "score": 2
+        },
+        {
+          "text": "Almost always",
+          "score": 3
+        }
+      ],
+      "dimension": 1
+    },
+    "q2": {
+      "text": "Do you feel drained without reason?",
+      "options": [
+        {
+          "text": "Rarely",
+          "score": 0
+        },
+        {
+          "text": "Sometimes",
+          "score": 1
+        },
+        {
+          "text": "Often",
+          "score": 2
+        },
+        {
+          "text": "Almost always",
+          "score": 3
+        }
+      ],
+      "dimension": 1
+    },
+    "q3": {
+      "text": "How has your sleep been lately?",
+      "options": [
+        {
+          "text": "Good",
+          "score": 0
+        },
+        {
+          "text": "A little disrupted",
+          "score": 1
+        },
+        {
+          "text": "Poor",
+          "score": 2
+        },
+        {
+          "text": "Cannot sleep",
+          "score": 3
+        }
+      ],
+      "dimension": 2
+    },
+    "q4": {
+      "text": "Have you noticed changes in appetite?",
+      "options": [
+        {
+          "text": "Normal",
+          "score": 0
+        },
+        {
+          "text": "A little less or more",
+          "score": 1
+        },
+        {
+          "text": "Significant change",
+          "score": 2
+        },
+        {
+          "text": "No appetite at all",
+          "score": 3
+        }
+      ],
+      "dimension": 2
+    },
+    "q5": {
+      "text": "Do the people around you understand how you feel?",
+      "options": [
+        {
+          "text": "Yes, mostly",
+          "score": 0
+        },
+        {
+          "text": "Sometimes",
+          "score": 1
+        },
+        {
+          "text": "Rarely",
+          "score": 2
+        },
+        {
+          "text": "No, never",
+          "score": 3
+        }
+      ],
+      "dimension": 3
+    },
+    "q6": {
+      "text": "When you think about your future, how do you feel?",
+      "options": [
+        {
+          "text": "Hopeful",
+          "score": 0
+        },
+        {
+          "text": "Uncertain",
+          "score": 1
+        },
+        {
+          "text": "Worried",
+          "score": 2
+        },
+        {
+          "text": "Hopeless / Blank",
+          "score": 3
+        }
+      ],
+      "dimension": 4
+    },
+    "q7": {
+      "text": "How do you feel about your exam results?",
+      "options": [
+        {
+          "text": "Fine",
+          "score": 0
+        },
+        {
+          "text": "A little worried",
+          "score": 1
+        },
+        {
+          "text": "Very anxious",
+          "score": 2
+        },
+        {
+          "text": "Cannot bear to think about it",
+          "score": 3
+        }
+      ],
+      "dimension": 4,
+      "branch": "academic"
+    },
+    "q8": {
+      "text": "When you imagine your future, what do you see?",
+      "options": [
+        {
+          "text": "Possibilities",
+          "score": 0
+        },
+        {
+          "text": "Unclear",
+          "score": 1
+        },
+        {
+          "text": "Difficulty",
+          "score": 2
+        },
+        {
+          "text": "Nothing / Blank",
+          "score": 3
+        }
+      ],
+      "dimension": 4,
+      "branch": "career"
+    },
+    "q9": {
+      "text": "Do you sometimes feel like everything would be easier if you weren't here?",
+      "options": [
+        {
+          "text": "Never",
+          "score": 0
+        },
+        {
+          "text": "Sometimes",
+          "score": 1
+        },
+        {
+          "text": "Often",
+          "score": 2
+        },
+        {
+          "text": "Very often",
+          "score": 3
+        }
+      ],
+      "dimension": 5,
+      "riskFlag": true
+    },
+    "q10": {
+      "text": "Have you thought about hurting yourself?",
+      "options": [
+        {
+          "text": "Never",
+          "score": 0
+        },
+        {
+          "text": "Sometimes",
+          "score": 1
+        },
+        {
+          "text": "Often",
+          "score": 2
+        },
+        {
+          "text": "Yes",
+          "score": 3
+        }
+      ],
+      "dimension": 5,
+      "riskFlag": true
+    }
+  }
+}

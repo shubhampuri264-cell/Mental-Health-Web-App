@@ -1,0 +1,22 @@
+/* Language Toggle — available at all times */
+.language-toggle {
+  position: fixed;
+  top: var(--space-md);
+  right: var(--space-md);
+  z-index: 100;
+  background: var(--color-white);
+  border: 1px solid rgba(27, 31, 94, 0.15);
+  border-radius: var(--radius-sm);
+  padding: var(--space-xs) var(--space-sm);
+  font-family: var(--font-body-ne);
+  font-size: var(--text-small);
+  color: var(--color-deep-indigo);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+.language-toggle:hover {
+  background: var(--color-cream);
+  border-color: var(--color-muted-gold);
+}

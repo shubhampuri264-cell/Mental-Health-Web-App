@@ -1,0 +1,144 @@
+/*
+ * MANASTHITI Design System
+ *
+ * Visual Direction: Editorial Precision x Dhaka Geometry
+ * Cultural Anchor: Dhaka textile — bold geometric patterns
+ * Design Philosophy: World-class, design-led — NOT mental-health-coded
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Yatra+One&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+
+:root {
+  /* Color Palette */
+  --color-deep-indigo: #1B1F5E;
+  --color-warm-terracotta: #C4522A;
+  --color-muted-gold: #D4A843;
+  --color-cream: #FAF7F2;
+  --color-charcoal: #1A1A1A;
+  --color-muted-gray: #6B6B6B;
+  --color-white: #FFFFFF;
+
+  /* Semantic Colors */
+  --color-primary: var(--color-deep-indigo);
+  --color-accent: var(--color-warm-terracotta);
+  --color-highlight: var(--color-muted-gold);
+  --color-background: var(--color-cream);
+  --color-text-primary: var(--color-charcoal);
+  --color-text-secondary: var(--color-muted-gray);
+
+  /* Typography */
+  --font-display: 'Yatra One', cursive;
+  --font-body-ne: 'Noto Sans Devanagari', sans-serif;
+  --font-body-en: 'Lora', serif;
+
+  /* Font Sizes */
+  --text-hero: 4.5rem;     /* 72pt — App name */
+  --text-ghost: 11.25rem;  /* 180pt — Ghost numerals */
+  --text-counter: 4.5rem;  /* 72pt — Solidarity counter */
+  --text-question: 1.5rem; /* 24pt — Question text */
+  --text-body: 1rem;       /* 16pt */
+  --text-en: 0.875rem;     /* 14pt — English companion */
+  --text-small: 0.75rem;   /* 12pt */
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Border radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-medium: 300ms ease;
+
+  /* Layout */
+  --max-width: 480px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Global Reset & Base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body-ne);
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* App container — mobile-first centered */
+#root {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+
+/* Nepali text styling — fallback primary */
+:where(.text-ne, [class*="-ne"]) {
+  font-family: var(--font-body-ne);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+/* English text styling — fallback secondary */
+:where(.text-en, [class*="-en"]) {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  color: var(--color-text-secondary);
+  font-size: 0.875em;
+}
+
+/* Dynamic swap for English UI mode */
+html[lang="en"] {
+  --font-body-ne: 'Lora', serif;
+}
+
+/* Selection color */
+::selection {
+  background: var(--color-muted-gold);
+  color: var(--color-deep-indigo);
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-muted-gold);
+  outline-offset: 2px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-cream);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-muted-gold);
+  border-radius: 2px;
+}

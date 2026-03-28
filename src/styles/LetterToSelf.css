@@ -1,0 +1,250 @@
+/* Screen 5 · Bhavisyako Patra / Letter to Future Self
+ * Final optional screen. Quiet invitation after support info.
+ * Stored only on device. Unlocks in 7 days.
+ */
+
+.letter-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-xl) var(--space-lg);
+}
+
+.letter-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-lg);
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Prompt */
+.letter-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.prompt-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+  line-height: 1.3;
+}
+
+.prompt-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-warm-terracotta);
+}
+
+/* Input — full-width, generous padding, Devanagari keyboard default */
+.letter-input-wrapper {
+  width: 100%;
+}
+
+.letter-input {
+  width: 100%;
+  font-family: var(--font-body-ne);
+  font-size: 1.125rem;
+  color: var(--color-charcoal);
+  background: var(--color-white);
+  border: 2px solid rgba(27, 31, 94, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  resize: none;
+  line-height: 1.6;
+  transition: border-color var(--transition-fast);
+}
+
+.letter-input:focus {
+  outline: none;
+  border-color: var(--color-muted-gold);
+}
+
+.letter-input::placeholder {
+  color: var(--color-muted-gray);
+  opacity: 0.5;
+}
+
+/* Privacy notice */
+.letter-privacy {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.privacy-icon {
+  font-size: var(--text-en);
+}
+
+.privacy-ne {
+  font-family: var(--font-body-ne);
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+.privacy-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+/* Optional label */
+.letter-optional-label {
+  padding: var(--space-xs) var(--space-sm);
+  background: rgba(212, 168, 67, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+.optional-text {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+/* Actions */
+.letter-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  width: 100%;
+}
+
+.letter-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+  background-color: var(--color-deep-indigo);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-xl);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.letter-cta.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 31, 94, 0.3);
+}
+
+.letter-cta.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.letter-cta.secondary {
+  background: transparent;
+  color: var(--color-deep-indigo);
+  border: 1px solid rgba(27, 31, 94, 0.2);
+}
+
+.letter-cta .cta-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.letter-skip {
+  background: none;
+  border: none;
+  font-family: var(--font-body-ne);
+  font-size: var(--text-en);
+  color: var(--color-muted-gray);
+  cursor: pointer;
+  padding: var(--space-sm);
+  transition: color var(--transition-fast);
+}
+
+.letter-skip:hover {
+  color: var(--color-charcoal);
+}
+
+/* Envelope states */
+.letter-envelope {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+}
+
+.letter-envelope.unlocked {
+  animation: none; /* No animation except solidarity counter */
+}
+
+.envelope-icon {
+  display: block;
+}
+
+/* Locked state text */
+.letter-locked-ne,
+.letter-saved-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+}
+
+.letter-locked-en,
+.letter-saved-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-warm-terracotta);
+}
+
+.letter-countdown-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1rem;
+  color: var(--color-muted-gray);
+}
+
+.letter-countdown-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+/* Revealed letter */
+.letter-revealed {
+  width: 100%;
+  padding: var(--space-xl);
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-muted-gold);
+}
+
+.letter-text {
+  font-family: var(--font-body-ne);
+  font-size: 1.125rem;
+  color: var(--color-charcoal);
+  line-height: 1.6;
+}
+
+.letter-heading-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+}
+
+.letter-heading-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-warm-terracotta);
+}

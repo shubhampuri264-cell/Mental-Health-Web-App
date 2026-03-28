@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Manasthiti",
+  "name": "Manasthiti — मनस्थिति",
+  "description": "Understand the state of your mind. तपाईंको मनको अवस्था बुझ्नुहोस्।",
   "icons": [
     {
       "src": "favicon.ico",
@@ -20,6 +21,10 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#1B1F5E",
+  "background_color": "#FAF7F2",
+  "lang": "ne",
+  "dir": "ltr",
+  "categories": ["health", "lifestyle"],
+  "orientation": "portrait"
 }

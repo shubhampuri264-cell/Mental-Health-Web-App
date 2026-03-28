@@ -1,0 +1,136 @@
+/* Top Bar */
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(250, 247, 242, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 90;
+  height: 52px;
+  border-bottom: 1px solid rgba(27, 31, 94, 0.06);
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-deep-indigo);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.back-button:hover {
+  background: rgba(27, 31, 94, 0.06);
+}
+
+.top-bar-title {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.top-bar-title-ne {
+  font-family: var(--font-body-ne);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+  line-height: 1.2;
+}
+
+.top-bar-title-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--color-muted-gray);
+  line-height: 1.2;
+}
+
+/* Override language toggle position when in top bar */
+.top-bar .language-toggle {
+  position: static;
+  flex-shrink: 0;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background: var(--color-white);
+  border-top: 1px solid rgba(27, 31, 94, 0.08);
+  padding: var(--space-xs) 0;
+  padding-bottom: max(var(--space-xs), var(--safe-area-bottom));
+  z-index: 90;
+  height: 64px;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  color: var(--color-muted-gray);
+  min-width: 56px;
+}
+
+.nav-item:hover {
+  color: var(--color-deep-indigo);
+  background: rgba(27, 31, 94, 0.04);
+}
+
+.nav-item.active {
+  color: var(--color-deep-indigo);
+}
+
+.nav-item.active .nav-icon {
+  color: var(--color-warm-terracotta);
+}
+
+.nav-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+}
+
+.nav-label-ne {
+  font-family: var(--font-body-ne);
+  font-size: 0.65rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+/* Screen padding helpers to account for fixed nav */
+.screen-with-nav {
+  padding-top: 60px;
+  padding-bottom: 72px;
+  min-height: 100vh;
+  min-height: 100dvh;
+}

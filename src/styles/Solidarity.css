@@ -1,0 +1,116 @@
+/* Screen 3 · Ekata / Solidarity Moment
+ * Single transition screen. Cream surface. One number. One line.
+ * The only animation in the entire application.
+ * No other elements. No navigation. Let it breathe.
+ */
+
+.solidarity-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.solidarity-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+/* Counter — Lora tabular, 72pt, Indigo, centered */
+.solidarity-counter {
+  font-family: var(--font-body-en);
+  font-size: clamp(3rem, 12vw, var(--text-counter));
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* Nepali message — 24pt Indigo */
+.solidarity-message-ne {
+  font-family: var(--font-body-ne);
+  font-size: clamp(1rem, 4vw, var(--text-question));
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+/* English message — Lora italic, 16pt, Terracotta */
+.solidarity-message-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-body);
+  color: var(--color-warm-terracotta);
+  line-height: 1.4;
+  max-width: 320px;
+}
+
+/* "You are not alone" block */
+.solidarity-notalone {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-lg);
+  border-top: 2px solid var(--color-muted-gold);
+}
+
+.notalone-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+  margin-bottom: var(--space-xs);
+}
+
+.notalone-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-warm-terracotta);
+}
+
+/* Continue button — subtle at bottom */
+.solidarity-continue {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background-color: var(--color-deep-indigo);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-2xl);
+  cursor: pointer;
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: var(--space-xl);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.solidarity-continue:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 31, 94, 0.3);
+}
+
+.continue-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.continue-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: rgba(255, 255, 255, 0.6);
+}

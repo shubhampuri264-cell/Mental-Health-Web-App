@@ -1,0 +1,302 @@
+.home-screen {
+  background-color: var(--color-cream);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-lg);
+  padding-top: var(--space-sm);
+}
+
+.home-header .language-toggle {
+  position: static;
+}
+
+.home-brand {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-app-name {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  color: var(--color-deep-indigo);
+  line-height: 1.1;
+}
+
+.home-app-sub {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: 0.65rem;
+  color: var(--color-muted-gray);
+  letter-spacing: 0.2em;
+}
+
+/* Greeting */
+.home-greeting {
+  margin-bottom: var(--space-lg);
+}
+
+.greeting-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.greeting-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-muted-gray);
+}
+
+/* Check-in CTA */
+.home-checkin-cta {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  background: var(--color-deep-indigo);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  margin-bottom: var(--space-lg);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.home-checkin-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(27, 31, 94, 0.3);
+}
+
+.checkin-cta-content {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.checkin-icon {
+  display: flex;
+  color: var(--color-muted-gold);
+}
+
+.home-checkin-cta .checkin-cta-ne {
+  display: block;
+  font-family: var(--font-body-ne);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-white) !important;
+  text-align: left;
+}
+
+.checkin-cta-en {
+  display: block;
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: rgba(255, 255, 255, 0.6);
+  text-align: left;
+}
+
+.checkin-arrow {
+  font-size: 1.5rem;
+  color: var(--color-muted-gold);
+}
+
+/* Status Card */
+.home-status-card {
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  border-left: 4px solid;
+}
+
+.tier-bg-1 { background: rgba(212, 168, 67, 0.08); border-color: var(--color-muted-gold); }
+.tier-bg-2 { background: rgba(196, 82, 42, 0.06); border-color: var(--color-warm-terracotta); }
+.tier-bg-3 { background: rgba(196, 82, 42, 0.1); border-color: var(--color-warm-terracotta); }
+.tier-bg-4 { background: rgba(27, 31, 94, 0.08); border-color: var(--color-deep-indigo); }
+
+.status-tier {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.status-tier-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+}
+
+.status-tier-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+.status-message-ne {
+  font-family: var(--font-body-ne);
+  font-size: var(--text-en);
+  color: var(--color-charcoal);
+}
+
+.status-message-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+/* Section */
+.home-section {
+  margin-bottom: var(--space-xl);
+}
+
+.section-title-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-deep-indigo);
+}
+
+.section-title-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+  margin-bottom: var(--space-md);
+}
+
+/* Actions Grid */
+.home-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-white);
+  border: 1px solid rgba(27, 31, 94, 0.06);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.action-card:hover {
+  border-color: var(--color-muted-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(27, 31, 94, 0.08);
+}
+
+.action-icon {
+  display: flex;
+  color: var(--color-deep-indigo);
+}
+
+.action-ne {
+  font-family: var(--font-body-ne);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-charcoal);
+}
+
+.action-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: 0.7rem;
+  color: var(--color-muted-gray);
+}
+
+/* Letter Status */
+.home-letter-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-white);
+  border: 1px solid rgba(212, 168, 67, 0.3);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.home-letter-status:hover {
+  border-color: var(--color-muted-gold);
+}
+
+.letter-status-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.letter-status-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.letter-status-ne {
+  font-family: var(--font-body-ne);
+  font-size: var(--text-en);
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+}
+
+.letter-status-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+.letter-status-arrow {
+  color: var(--color-muted-gold);
+  font-size: 1.25rem;
+}
+
+/* Emergency */
+.home-emergency {
+  text-align: center;
+  padding: var(--space-lg);
+  border-top: 1px solid rgba(27, 31, 94, 0.08);
+  margin-bottom: var(--space-md);
+}
+
+.emergency-text-ne {
+  font-family: var(--font-body-ne);
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+}
+
+.emergency-text-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+  margin-bottom: var(--space-sm);
+}
+
+.emergency-link {
+  font-family: var(--font-body-en);
+  font-size: var(--text-en);
+  font-weight: 600;
+  color: var(--color-warm-terracotta);
+  text-decoration: none;
+}

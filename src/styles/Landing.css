@@ -1,0 +1,126 @@
+.landing-screen {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--color-cream);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-xl);
+  padding-left: calc(var(--space-xl) + 28px); /* Account for Dhaka border */
+  position: relative;
+}
+
+.landing-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-xl);
+  max-width: 100%;
+}
+
+/* App Name — Yatra One, 72pt, Indigo */
+.app-name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 8vw, var(--text-hero));
+  color: var(--color-deep-indigo);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.app-name-roman {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-muted-gray);
+  letter-spacing: 0.3em;
+  text-transform: lowercase;
+  margin-top: calc(var(--space-xs) * -1);
+}
+
+/* Tagline block */
+.tagline-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.tagline-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+}
+
+.tagline-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-en);
+  color: var(--color-warm-terracotta);
+}
+
+/* CTA Button */
+.cta-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  background-color: var(--color-deep-indigo);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-md) var(--space-2xl);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  width: 100%;
+  max-width: 320px;
+}
+
+.cta-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 31, 94, 0.3);
+}
+
+.cta-button:active {
+  transform: translateY(0);
+}
+
+.cta-ne {
+  font-family: var(--font-body-ne);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.cta-en {
+  font-family: var(--font-body-en);
+  font-style: italic;
+  font-size: var(--text-small);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Trust Badges */
+.trust-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-body-ne);
+  font-size: var(--text-small);
+  color: var(--color-muted-gray);
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid rgba(107, 107, 107, 0.2);
+  border-radius: var(--radius-sm);
+}
+
+.badge-icon {
+  font-size: 0.875rem;
+}

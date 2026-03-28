@@ -1,0 +1,27 @@
+/* Dhaka Border Strip — left-edge vertical border
+ * Inspired by Dhaka textile geometry
+ * Runs full height on left edge in Indigo + Gold
+ */
+
+.dhaka-border {
+  position: fixed;
+  z-index: 10;
+}
+
+.dhaka-vertical {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+}
+
+.dhaka-horizontal {
+  left: 0;
+  right: 0;
+  height: 24px;
+}
+
+.dhaka-svg {
+  width: 100%;
+  height: 100%;
+}

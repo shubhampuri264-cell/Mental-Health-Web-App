@@ -1,0 +1,50 @@
+/* Thin geometric progress bar at top edge
+ * Fills per step. No percentages shown.
+ */
+
+.progress-bar-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  padding: 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+.progress-bar-track {
+  height: 4px;
+  background: rgba(27, 31, 94, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-deep-indigo) 0%,
+    var(--color-deep-indigo) 50%,
+    var(--color-muted-gold) 100%
+  );
+  transition: width 0.4s ease-out;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Subtle Dhaka pattern overlay */
+.progress-bar-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0px,
+    transparent 8px,
+    rgba(212, 168, 67, 0.15) 8px,
+    rgba(212, 168, 67, 0.15) 10px
+  );
+  pointer-events: none;
+}
