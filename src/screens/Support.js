@@ -22,21 +22,10 @@ function Support() {
 
   const { tier } = result;
 
-  // Tier 4: Full-screen crisis card — hardcoded, never A/B tested
-  if (tier === 4) {
-    return <CrisisCard />;
-  }
-
   const tierKey = `tier${tier}`;
   const tierData = t(`tiers.${tierKey}`, { returnObjects: true });
 
   const handleCTA = () => {
-    if (tier === 3) {
-      // For Tier 3, show resources with contact info
-      // In production, this could link to NGO pages
-    }
-
-    // Set weekly check-in reminder in localStorage
     if (tier === 2) {
       const nextCheckin = new Date();
       nextCheckin.setDate(nextCheckin.getDate() + 7);
@@ -48,6 +37,9 @@ function Support() {
 
   return (
     <div className="support-screen">
+      {/* Tier 4: Show crisis card prominently at the top, but don't block the rest */}
+      {tier === 4 && <CrisisCard />}
+
       <div className={`support-card tier-${tier}`}>
         <div className={`support-top-border ${tier === 4 ? 'border-indigo' : 'border-terracotta'}`} />
 
