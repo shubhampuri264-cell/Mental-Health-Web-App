@@ -26,13 +26,16 @@ function Support() {
   const tierData = t(`tiers.${tierKey}`, { returnObjects: true });
 
   const handleCTA = () => {
-    if (tier === 2) {
+    if (tier === 1) {
+      navigate('/library');
+    } else if (tier === 2) {
       const nextCheckin = new Date();
       nextCheckin.setDate(nextCheckin.getDate() + 7);
       localStorage.setItem('manasthiti-next-checkin', nextCheckin.toISOString());
+      navigate('/letter');
+    } else {
+      navigate('/letter');
     }
-
-    navigate('/letter');
   };
 
   return (
@@ -73,8 +76,19 @@ function Support() {
             </div>
           )}
 
-          <button className="support-cta" onClick={handleCTA}>
-            <span className="cta-ne">{tierData.cta}</span>
+          {tier === 4 ? (
+            <a href="tel:1660-0102005" className="support-cta">
+              <span className="cta-ne">{tierData.cta}</span>
+            </a>
+          ) : (
+            <button className="support-cta" onClick={handleCTA}>
+              <span className="cta-ne">{tierData.cta}</span>
+            </button>
+          )}
+
+          {/* Continue to letter — available for all tiers */}
+          <button className="support-nav-btn" onClick={() => navigate('/letter')} style={{ marginTop: '0.75rem', width: '100%' }}>
+            <span className="nav-btn-ne">{t('nav.letterToSelf')}</span>
           </button>
 
           {/* Quick navigation to key features */}
