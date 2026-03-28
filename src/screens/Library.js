@@ -8,7 +8,7 @@ import '../styles/Library.css';
 import { supabase } from '../supabaseClient';
 
 function Library() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const isEn = i18n.language === 'en';
   const [libraryContent, setLibraryContent] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -18,9 +18,12 @@ function Library() {
   const [activePrompt, setActivePrompt] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
     const timeoutId = setTimeout(() => {
-      setConnectionError(true);
-      setLoading(false);
+      if (!cancelled) {
+        setConnectionError(true);
+        setLoading(false);
+      }
     }, 5000);
 
     async function fetchLibrary() {
@@ -28,28 +31,34 @@ function Library() {
         const { data, error } = await supabase
           .from('library_content')
           .select('*');
-        
+
+        if (cancelled) return;
         if (error) throw error;
-        
-        setLibraryContent(data || []);
+
         clearTimeout(timeoutId);
+        setLibraryContent(data || []);
         setConnectionError(false);
       } catch (err) {
+        if (cancelled) return;
         console.error('Error fetching library from Supabase:', err);
+        clearTimeout(timeoutId);
         setConnectionError(true);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     }
     fetchLibrary();
-    
-    return () => clearTimeout(timeoutId);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   if (selectedItem === 'breathing') {
     return (
       <div className="library-detail-screen screen-with-nav">
-        <TopBar title="Breathing Exercise" titleEn="Breathing Exercise" />
+        <TopBar title={t('nav.breathingExercise')} titleEn={t('nav.breathingExercise')} />
         <BreathingExercise onClose={() => setSelectedItem(null)} />
         <BottomNav />
       </div>
@@ -173,7 +182,7 @@ function Library() {
   // Library listing
   return (
     <div className="library-screen screen-with-nav">
-      <TopBar title={isEn ? "Self-Help Library" : "स्व-सहायता"} titleEn={isEn ? "Self-Help Library" : "स्व-सहायता"} showBack={false} />
+      <TopBar title={t('nav.selfHelpLibrary')} titleEn={t('nav.selfHelpLibrary')} showBack={false} />
 
       <div className="library-categories">
         {loading ? (

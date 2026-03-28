@@ -7,8 +7,7 @@ import MoodChart from '../components/MoodChart';
 import '../styles/Home.css';
 
 function Home() {
-  const { i18n } = useTranslation();
-  const isEn = i18n.language === 'en';
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
   const [letter, setLetter] = useState(null);
@@ -25,27 +24,28 @@ function Home() {
 
   const hasCheckedIn = history.length > 0;
   const tierNames = {
-    1: { ne: 'घाम लागेको', en: 'Sunlit' },
-    2: { ne: 'आंशिक बादल', en: 'Partly Cloudy' },
-    3: { ne: 'घना बादल', en: 'Heavy Clouds' },
-    4: { ne: 'आँधी', en: 'Storm' },
+    1: t('nav.tierSunlit'),
+    2: t('nav.tierPartlyCloudy'),
+    3: t('nav.tierHeavyClouds'),
+    4: t('nav.tierStorm'),
   };
 
   return (
     <div className="home-screen screen-with-nav">
       <div className="home-header">
         <div className="home-brand">
-          <h1 className="home-app-name">मनस्थिति</h1>
-          <p className="home-app-sub">MANASTHITI</p>
+          <h1 className="home-app-name">{t('appName')}</h1>
+          <p className="home-app-sub">{t('appNameRoman')}</p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <LanguageToggle />
           <button 
             onClick={() => navigate('/profile')}
             style={{ background: 'none', border: 'none', color: 'var(--color-primary-sage)', cursor: 'pointer', padding: '0.5rem' }}
-            title={isEn ? "Profile & Account" : "प्रोफाइल र खाता"}
+            title={t('nav.profileAccount')}
+            aria-label={t('nav.profileAccount')}
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" role="presentation" aria-hidden="true">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
@@ -56,7 +56,7 @@ function Home() {
       {/* Greeting */}
       <div className="home-greeting">
         <h2 className="greeting-ne">
-          {hasCheckedIn ? (isEn ? 'Welcome back.' : 'फेरि स्वागत छ।') : (isEn ? 'Understand the state of your mind.' : 'तपाईंको मनको अवस्था बुझ्नुहोस्।')}
+          {hasCheckedIn ? t('nav.welcomeBack') : t('nav.understandMind')}
         </h2>
       </div>
 
@@ -64,7 +64,7 @@ function Home() {
       <button className="home-checkin-cta" onClick={() => navigate('/check-in')}>
         <div className="checkin-cta-content">
           <span className="checkin-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" role="presentation" aria-hidden="true">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
               <polyline points="14 2 14 8 20 8"/>
               <line x1="12" y1="18" x2="12" y2="12"/>
@@ -73,7 +73,7 @@ function Home() {
           </span>
           <div>
             <span className="checkin-cta-ne">
-              {hasCheckedIn ? (isEn ? 'Check in again' : 'फेरि जाँच गर्नुहोस्') : (isEn ? 'Start your check-in' : 'जाँच सुरु गर्नुहोस्')}
+              {hasCheckedIn ? t('nav.checkinAgain') : t('nav.startCheckin')}
             </span>
           </div>
         </div>
@@ -84,19 +84,17 @@ function Home() {
       {lastResult && (
         <div className={`home-status-card tier-bg-${lastResult.tier}`}>
           <div className="status-tier">
-            <span className="status-tier-ne">{isEn ? tierNames[lastResult.tier]?.en : tierNames[lastResult.tier]?.ne}</span>
+            <span className="status-tier-ne">{tierNames[lastResult.tier]}</span>
           </div>
           <p className="status-message-ne">
-            {lastResult.tier <= 2
-              ? (isEn ? 'You are taking care of yourself.' : 'तपाईंले आफ्नो ख्याल राख्दै हुनुहुन्छ।')
-              : (isEn ? 'Support is available. You are not alone.' : 'सहायता उपलब्ध छ। तपाईं एक्लो हुनुहुन्न।')}
+            {lastResult.tier <= 2 ? t('nav.takingCare') : t('nav.supportAvailable')}
           </p>
         </div>
       )}
 
       {/* Mood History Chart */}
       <div className="home-section">
-        <h3 className="section-title-ne">{isEn ? 'Mood Trend' : 'मूड ट्रेन्ड'}</h3>
+        <h3 className="section-title-ne">{t('nav.moodTrend')}</h3>
         <MoodChart />
       </div>
 
@@ -111,7 +109,7 @@ function Home() {
               <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </span>
-          <span className="action-ne">{isEn ? 'Support Groups' : 'सहायता समूह'}</span>
+          <span className="action-ne">{t('nav.supportGroups')}</span>
         </button>
 
         <button className="action-card" onClick={() => navigate('/chat')}>
@@ -120,7 +118,7 @@ function Home() {
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
             </svg>
           </span>
-          <span className="action-ne">{isEn ? 'Talk to Phoenix' : 'फिनिक्ससँग कुरा गर्नुहोस्'}</span>
+          <span className="action-ne">{t('nav.talkToPhoenix')}</span>
         </button>
 
         <button className="action-card" onClick={() => navigate('/library')}>
@@ -130,7 +128,7 @@ function Home() {
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
             </svg>
           </span>
-          <span className="action-ne">{isEn ? 'Self-Help' : 'स्व-सहायता'}</span>
+          <span className="action-ne">{t('nav.selfHelpLibrary')}</span>
         </button>
 
         <button className="action-card" onClick={() => navigate('/letter')}>
@@ -140,7 +138,7 @@ function Home() {
               <polyline points="22,6 12,13 2,6"/>
             </svg>
           </span>
-          <span className="action-ne">{isEn ? 'Letter to Self' : 'भविष्यको पत्र'}</span>
+          <span className="action-ne">{t('nav.letterToSelf')}</span>
         </button>
       </div>
 
@@ -151,8 +149,8 @@ function Home() {
           <div className="letter-status-text">
             <span className="letter-status-ne">
               {new Date(letter.unlockDate) <= new Date()
-                ? (isEn ? 'Your letter is ready!' : 'तपाईंको पत्र तयार छ!')
-                : (isEn ? `Opens in ${Math.ceil((new Date(letter.unlockDate) - new Date()) / (1000*60*60*24))} days` : `पत्र ${Math.ceil((new Date(letter.unlockDate) - new Date()) / (1000*60*60*24))} दिनमा खुल्छ`)}
+                ? t('letter.unlocked')
+                : t('letter.locked').replace('7', Math.ceil((new Date(letter.unlockDate) - new Date()) / (1000*60*60*24))).replace('७', Math.ceil((new Date(letter.unlockDate) - new Date()) / (1000*60*60*24)))}
             </span>
           </div>
           <span className="letter-status-arrow">→</span>
@@ -161,7 +159,7 @@ function Home() {
 
       {/* Emergency contact — always visible */}
       <div className="home-emergency">
-        <p className="emergency-text-ne">{isEn ? 'Need immediate help?' : 'तुरुन्त सहायता चाहिन्छ?'}</p>
+        <p className="emergency-text-ne">{t('nav.needHelp')}</p>
         <a href="tel:1660-0102005" className="emergency-link">
           TPO Nepal: 1660-0102005
         </a>

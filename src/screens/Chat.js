@@ -42,7 +42,7 @@ function Chat() {
       
       const genAI = new GoogleGenerativeAI(activeApiKey || '');
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-1.5-flash",
+        model: "gemini-2.0-flash",
         systemInstruction: {
           role: "system",
           parts: [{ text: SYSTEM_PROMPT }]
@@ -135,7 +135,7 @@ function Chat() {
           
           // Ad-hoc run to save the current message without waiting for useEffect loop
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
           
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory.map(msg => ({ role: msg.sender === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }));
@@ -153,7 +153,7 @@ function Chat() {
         sender: 'phoenix',
         text: responseText,
         time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false }),
-        isCrisis: /1660-?0102005/.test(responseText) // Flag if the crisis protocol was triggered
+        isCrisis: /1660-?0102005|suicide|self[- ]?harm|आत्महत्या|आत्म[- ]?हानि|crisis|hotline|emergency/i.test(responseText)
       };
 
       setMessages(prev => {
@@ -191,7 +191,7 @@ function Chat() {
 
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
-    recognition.lang = 'en-US'; // English-only explicitly specified
+    recognition.lang = isEn ? 'en-US' : 'ne-NP';
 
     recognition.onstart = () => setIsListening(true);
     recognition.onend = () => setIsListening(false);
@@ -287,7 +287,8 @@ function Chat() {
         <button 
           className="ai-chat-mic"
           onClick={toggleListen}
-          title={isEn ? "Talk to Phoenix (English only)" : "अंग्रेजीमा बोल्नुहोस्"}
+          title={isEn ? "Talk to Phoenix" : "फिनिक्ससँग बोल्नुहोस्"}
+          aria-label={isEn ? "Voice input" : "आवाज इनपुट"}
           style={{ background: 'none', border: 'none', color: isListening ? '#C4522A' : '#1B1F5E', cursor: 'pointer', marginRight: '8px', padding: '8px' }}
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill={isListening ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

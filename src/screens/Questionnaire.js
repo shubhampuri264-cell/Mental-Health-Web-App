@@ -57,9 +57,13 @@ function Questionnaire() {
       Object.values(newAnswers).forEach(ans => {
          if (ans && typeof ans.score === 'number') total += ans.score;
       });
-      
-      supabase.from('user_checkins').insert([{ stress_score: total }]).then(({error}) => {
-          if (error) console.error('Supabase logging error:', error);
+
+      supabase.auth.getUser().then(({ data: { user } }) => {
+        if (user) {
+          supabase.from('user_checkins').insert([{ stress_score: total, user_id: user.id }]).then(({ error }) => {
+            if (error) console.error('Supabase logging error:', error);
+          });
+        }
       });
 
       navigate('/solidarity');

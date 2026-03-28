@@ -17,6 +17,8 @@ function DhakaBorder({ orientation = 'vertical', className = '' }) {
         preserveAspectRatio="none"
         viewBox="0 0 24 200"
         xmlns="http://www.w3.org/2000/svg"
+        role="presentation"
+        aria-hidden="true"
       >
         {/* Repeating chevron/diamond pattern */}
         {Array.from({ length: 20 }).map((_, i) => (

@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-// eslint-disable-next-line no-unused-vars
-import { useNavigate } from 'react-router-dom';
 import { TopBar, BottomNav } from '../components/Navigation';
 import { supabase } from '../supabaseClient';
 import '../styles/SupportGroups.css';
@@ -60,8 +58,9 @@ function SupportGroups() {
   useEffect(() => {
     if (!selectedGroup) return;
 
+    let cancelled = false;
     const timeoutId = setTimeout(() => {
-      setConnectionError(true);
+      if (!cancelled) setConnectionError(true);
     }, 5000);
 
     const fetchMessages = async () => {
@@ -72,14 +71,17 @@ function SupportGroups() {
           .eq('group_id', selectedGroup)
           .order('created_at', { ascending: true })
           .limit(50);
-        
+
+        if (cancelled) return;
         if (error) throw error;
-        
-        setMessages(data || []);
+
         clearTimeout(timeoutId);
+        setMessages(data || []);
         setConnectionError(false);
       } catch (err) {
+        if (cancelled) return;
         console.error('Supabase fetch error:', err);
+        clearTimeout(timeoutId);
         setConnectionError(true);
       }
     };
@@ -88,11 +90,10 @@ function SupportGroups() {
 
     // Subscribe to new messages AND Supabase Presence tracking using Channels
     const channel = supabase.channel(`public:support_groups:${selectedGroup}`);
-    
+
     channel
       .on('presence', { event: 'sync' }, () => {
         const state = channel.presenceState();
-        // Count total unique clients sitting in this room purely dynamically
         setOnlineCount(Object.keys(state).length);
       })
       .on(
@@ -102,15 +103,16 @@ function SupportGroups() {
       )
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          // Announce that we just physically entered this group chat
           await channel.track({ user: myAnonId, online_at: new Date().toISOString() });
         }
       });
 
     return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
       supabase.removeChannel(channel);
     };
-  }, [selectedGroup]);
+  }, [selectedGroup, myAnonId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

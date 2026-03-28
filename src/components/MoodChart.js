@@ -12,9 +12,13 @@ function MoodChart() {
   useEffect(() => {
     async function fetchScores() {
       try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
         const { data: checks, error } = await supabase
           .from('user_checkins')
           .select('created_at, stress_score')
+          .eq('user_id', user.id)
           .order('created_at', { ascending: false })
           .limit(7);
 

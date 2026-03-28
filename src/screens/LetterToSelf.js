@@ -174,7 +174,7 @@ function LetterToSelf() {
         </div>
 
         <div className="letter-optional-label">
-          <span className="optional-text">Optional</span>
+          <span className="optional-text">{t('letter.skip')}</span>
         </div>
 
         <div className="letter-actions">

@@ -88,13 +88,13 @@ function Support() {
           {/* Quick navigation to key features */}
           <div className="support-nav-actions">
             <button className="support-nav-btn" onClick={() => navigate('/groups')}>
-              <span className="nav-btn-ne">{t('solidarity.continue') || 'Join a support group'}</span>
+              <span className="nav-btn-ne">{t('nav.joinSupportGroup')}</span>
             </button>
             <button className="support-nav-btn" onClick={() => navigate('/chat')}>
-              <span className="nav-btn-ne">{t('solidarity.notAlone') || 'Talk to Phoenix'}</span>
+              <span className="nav-btn-ne">{t('nav.talkToPhoenix')}</span>
             </button>
             <button className="support-nav-btn secondary" onClick={() => navigate('/home')}>
-              <span className="nav-btn-ne">{t('solidarity.continue') || 'Go to Home'}</span>
+              <span className="nav-btn-ne">{t('nav.goHome')}</span>
             </button>
           </div>
         </div>

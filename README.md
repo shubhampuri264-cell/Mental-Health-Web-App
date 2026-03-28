@@ -1,70 +1,79 @@
-# Getting Started with Create React App
+# Manasthiti: Mental Health Platform
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
+Manasthiti (meaning State of Mind in Nepali) is a comprehensive mental health web application designed to provide immediate psychological first aid and community support. The platform is built to be universally accessible, offering full bilingual support in English and Nepali. 
 
-## Available Scripts
+It balances user privacy with personalized care by allowing users to access all features completely anonymously, with the optional ability to create a secure account to save their progress across devices.
 
-In the project directory, you can run:
+## What It Does the Core Features
 
-### `npm start`
+### 1. Phoenix AI Companion
+An intelligent conversational assistant tuned specifically for crisis de-escalation and cognitive behavioral therapy techniques. 
+- Users can type or speak directly to Phoenix using their microphone.
+- The AI provides structured, empathetic, and highly readable guidance to help users navigate tough moments.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 2. Anonymous Support Groups
+A real-time community forum where users can connect with others facing similar challenges.
+- Conversations happen instantly without the need to refresh the page.
+- The platform uses automated filters to block toxic or abusive language, ensuring a safe and supportive space.
+- Accurate live counters show exactly how many people are online in a room at any given moment.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 3. Mood Tracking Dashboard
+Users can take a quick daily assessment to calculate their current stress levels.
+- Results are securely saved and plotted on an interactive, visual line graph.
+- This helps users track their mental health trends over time to identify what triggers their stress.
 
-### `npm test`
+### 4. Interactive Resource Library
+A collection of self-help tools focused on grounding and relaxation.
+- Includes a built-in audio player for streaming guided breathing exercises and meditation sessions.
+- Features interactive journaling prompts configured to stay entirely private to the user's local device.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## Technical Architecture
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend
+- React.js: Powers the user interface and fast client-side routing.
+- Recharts: Renders the dynamic data visualizations for mood tracking.
+- i18next: Manages the seamless, real-time translation toggling between English and Nepali without page reloads.
+- Web Speech API: Integrates native browser voice-to-text accessibility.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Backend and Infrastructure
+- Supabase : Serves as the primary database, ensuring high availability and secure data warehousing.
+- Supabase Realtime: Powers the live community chatting features and active user presence tracking via WebSockets.
+- Hybrid Authentication: The application automatically provisions a secure, anonymous session token on the user's first visit. This secures their data instantly via database constraints. Users can later link an email address to permanently save their profile.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Artificial Intelligence
+- Google Gemini 1.5 Flash SDK: Drives the logic and empathy of the Phoenix Chatbot. 
+- The integration includes a built-in dynamic failover mechanism to seamlessly switch to a backup API key if primary rate limits are reached, preventing the UI from crashing during a crisis.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Installation and Setup
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To run Manasthiti on your local machine:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1. Clone the repository and install dependencies:
+```bash
+git clone https://github.com/shubhampuri264-cell/Mental-Health-Web-App.git
+cd "Mental Health Web App"/manasthiti
+npm install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+2. Set up environment variables:
+Create a file named `.env` in the root of the project and add your API keys:
+```env
+REACT_APP_SUPABASE_URL=your_supabase_url
+REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
+REACT_APP_GEMINI_API_KEY=your_primary_gemini_key
+REACT_APP_GEMINI_API_KEY_BACKUP=your_backup_gemini_key
+```
 
-## Learn More
+3. Start the application:
+```bash
+npm start
+```
+The app will launch at http://localhost:3000.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Security and Privacy
+Manasthiti uses strict Row Level Security on its databases. By assigning anonymous authentication tokens to all visitors automatically, the platform actively blocks automated bots and malicious scrapers from accessing or altering the community data APIs.
