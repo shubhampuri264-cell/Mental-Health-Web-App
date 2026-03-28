@@ -20,28 +20,44 @@ RULES FOR PHOENIX:
 function Chat() {
   const { i18n } = useTranslation();
   const isEn = i18n.language === 'en';
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(() => {
+    const stored = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
+    if (stored.length > 0) return stored;
+    return [{
+      id: Date.now(),
+      sender: 'phoenix',
+      text: i18n.language === 'en'
+        ? "Namaste! I'm Phoenix. How are you feeling today? I am here to help you navigate whatever is on your mind."
+        : "नमस्ते! म फिनिक्स हुँ। तपाईंलाई कस्तो लागिरहेको छ आज? म तपाईंलाई सुन्न र मद्दत गर्न यहाँ छु।",
+      time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false }),
+      isGreeting: true
+    }];
+  });
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [rateLimitWarning, setRateLimitWarning] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [activeApiKey, setActiveApiKey] = useState(API_KEY || '');
-  
+
   const recognitionRef = useRef(null);
-  
+
   const lastMsgTime = useRef(0);
   const messagesEndRef = useRef(null);
   const chatSessionRef = useRef(null);
+  const sessionInitialized = useRef(false);
 
   useEffect(() => {
-    // Initialize Gemini Chat Session with System Prompt
+    // Only initialize the Gemini session once
+    if (sessionInitialized.current) return;
+
     try {
       if (!activeApiKey) {
         console.warn('Gemini API Key is missing. Chat will not function fully.');
+        return;
       }
-      
-      const genAI = new GoogleGenerativeAI(activeApiKey || '');
-      const model = genAI.getGenerativeModel({ 
+
+      const genAI = new GoogleGenerativeAI(activeApiKey);
+      const model = genAI.getGenerativeModel({
         model: "gemini-2.0-flash",
         systemInstruction: {
           role: "system",
@@ -50,38 +66,28 @@ function Chat() {
       });
 
       const storedHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
-      
-      // Map existing history to Gemini structured format (user vs model)
-      const geminiHistory = storedHistory.map(msg => ({
-        role: msg.sender === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.text }]
-      }));
+
+      // Only include actual conversation messages in Gemini history (skip greeting)
+      const geminiHistory = storedHistory
+        .filter(msg => !msg.isGreeting)
+        .map(msg => ({
+          role: msg.sender === 'user' ? 'user' : 'model',
+          parts: [{ text: msg.text }]
+        }));
 
       chatSessionRef.current = model.startChat({
         history: geminiHistory,
         generationConfig: {
-          maxOutputTokens: 250, // Force concise, manageable companion responses
-          temperature: 0.7,     // High enough for empathy, low enough to stay on rail
+          maxOutputTokens: 250,
+          temperature: 0.7,
         }
       });
 
-      if (storedHistory.length > 0) {
-        setMessages(storedHistory);
-      } else {
-        const greeting = {
-          id: 1,
-          sender: 'phoenix',
-          text: isEn 
-            ? "Namaste! I'm Phoenix. How are you feeling today? I am here to help you navigate whatever is on your mind." 
-            : "नमस्ते! म फिनिक्स हुँ। तपाईंलाई कस्तो लागिरहेको छ आज? म तपाईंलाई सुन्न र मद्दत गर्न यहाँ छु।",
-          time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false })
-        };
-        setMessages([greeting]);
-      }
+      sessionInitialized.current = true;
     } catch (error) {
       console.error('Failed to initialize Gemini:', error);
     }
-  }, [isEn, activeApiKey]);
+  }, [activeApiKey]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -126,25 +132,29 @@ function Chat() {
         const result = await chatSessionRef.current.sendMessage(promptText);
         responseText = result.response.text();
       } catch (geminiError) {
-        console.error('Gemini API Error Defaulting:', geminiError);
-        
-        // Automatic Network Failover Logic
+        console.error('Gemini API Error:', geminiError);
+
+        // Automatic failover to backup key
         if (activeApiKey === API_KEY && API_KEY_BACKUP) {
-          console.warn("Primary API Key failed. Failing over to Backup Key...");
-          setActiveApiKey(API_KEY_BACKUP); // Set hooks for future renders
-          
-          // Ad-hoc run to save the current message without waiting for useEffect loop
+          console.warn("Primary key failed. Switching to backup...");
+
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
           const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
-          
+
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
-          const backupHistory = rawHistory.map(msg => ({ role: msg.sender === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }));
-          
+          const backupHistory = rawHistory
+            .filter(msg => !msg.isGreeting)
+            .map(msg => ({ role: msg.sender === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }));
+
           const backupSession = backupModel.startChat({ history: backupHistory, generationConfig: { maxOutputTokens: 250, temperature: 0.7 }});
           const backupResult = await backupSession.sendMessage(promptText);
           responseText = backupResult.response.text();
+
+          // Persist backup session for future messages
+          chatSessionRef.current = backupSession;
+          setActiveApiKey(API_KEY_BACKUP);
         } else {
-          throw geminiError; // Propagate crash if we are already on backup or don't have one
+          throw geminiError;
         }
       }
 
@@ -224,6 +234,29 @@ function Chat() {
           <span className="online-dot" />
           <span>Online</span>
         </div>
+        <button
+          onClick={() => {
+            localStorage.removeItem('manasthiti-phoenix-chat');
+            sessionInitialized.current = false;
+            chatSessionRef.current = null;
+            setMessages([{
+              id: Date.now(),
+              sender: 'phoenix',
+              text: isEn
+                ? "Namaste! I'm Phoenix. How are you feeling today? I am here to help you navigate whatever is on your mind."
+                : "नमस्ते! म फिनिक्स हुँ। तपाईंलाई कस्तो लागिरहेको छ आज? म तपाईंलाई सुन्न र मद्दत गर्न यहाँ छु।",
+              time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false }),
+              isGreeting: true
+            }]);
+          }}
+          style={{ background: 'none', border: 'none', color: 'var(--color-muted-gray)', cursor: 'pointer', padding: '8px', fontSize: '0.75rem' }}
+          title={isEn ? "New chat" : "नयाँ कुरा"}
+          aria-label={isEn ? "Start new chat" : "नयाँ कुरा सुरु गर्नुहोस्"}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="1 4 1 10 7 10" /><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+          </svg>
+        </button>
       </div>
 
       <div className="ai-chat-disclaimer" style={{position: 'relative'}}>
