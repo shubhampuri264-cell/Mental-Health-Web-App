@@ -65,7 +65,7 @@ function LetterToSelf() {
       hadLetter: false,
     });
     localStorage.setItem('manasthiti-history', JSON.stringify(history));
-    navigate('/');
+    navigate('/home');
   };
 
   const handleCheckinAgain = () => {
@@ -113,7 +113,7 @@ function LetterToSelf() {
             <span className="privacy-ne">{t('letter.privacy')}</span>
           </div>
 
-          <button className="letter-cta secondary" onClick={() => navigate('/')}>
+          <button className="letter-cta secondary" onClick={() => navigate('/home')}>
             <span>← {t('appName')}</span>
           </button>
         </div>
@@ -140,7 +140,7 @@ function LetterToSelf() {
             <span className="privacy-ne">{t('letter.privacy')}</span>
           </div>
 
-          <button className="letter-cta secondary" onClick={() => navigate('/')}>
+          <button className="letter-cta secondary" onClick={() => navigate('/home')}>
             <span>← {t('appName')}</span>
           </button>
         </div>

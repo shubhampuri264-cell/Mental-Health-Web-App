@@ -15,7 +15,7 @@ function Solidarity() {
   useEffect(() => {
     const stored = sessionStorage.getItem('manasthiti-answers');
     if (!stored) {
-      navigate('/');
+      navigate('/home');
       return;
     }
 

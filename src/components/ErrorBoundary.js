@@ -26,9 +26,12 @@ class ErrorBoundary extends React.Component {
           >
             Reload
           </button>
-          <div style={{ marginTop: '2rem' }}>
+          <div style={{ marginTop: '2rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
             <a href="tel:1660-0102005" style={{ color: '#C4522A', fontWeight: 'bold' }}>
               TPO Nepal: 1660-0102005
+            </a>
+            <a href="tel:988" style={{ color: '#C4522A', fontWeight: 'bold' }}>
+              988 Suicide &amp; Crisis Lifeline (US)
             </a>
           </div>
         </div>

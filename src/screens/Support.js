@@ -12,7 +12,7 @@ function Support() {
   useEffect(() => {
     const stored = sessionStorage.getItem('manasthiti-result');
     if (!stored) {
-      navigate('/');
+      navigate('/home');
       return;
     }
     setResult(JSON.parse(stored));

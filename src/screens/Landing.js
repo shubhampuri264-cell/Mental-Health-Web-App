@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import DhakaBorder from '../components/DhakaBorder';
@@ -8,6 +8,14 @@ import '../styles/Landing.css';
 function Landing() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // If user has already completed a check-in, send them to Home instead of Landing
+    const hasResult = sessionStorage.getItem('manasthiti-result');
+    if (hasResult) {
+      navigate('/home', { replace: true });
+    }
+  }, [navigate]);
 
   return (
     <div className="landing-screen">

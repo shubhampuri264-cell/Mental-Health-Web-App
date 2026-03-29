@@ -9,6 +9,40 @@ import '../styles/Chat.css';
 const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
 const API_KEY_BACKUP = process.env.REACT_APP_GEMINI_API_KEY_BACKUP;
 
+// Offensive / toxic word filter (shared with SupportGroups)
+const OFFENSIVE_WORDS = [
+  'stupid', 'idiot', 'dumb', 'hate', 'ugly', 'die', 'kill',
+  'paagal', 'mula', 'gadha', 'bitch', 'moron', 'worthless',
+  'fuck', 'shit', 'ass', 'damn', 'bastard', 'crap', 'stfu',
+  'retard', 'slut', 'whore', 'nigger', 'faggot'
+];
+
+function isOffensive(text) {
+  const normalized = text.toLowerCase();
+  return OFFENSIVE_WORDS.some(word => {
+    const regex = new RegExp(`\\b${word}\\b`);
+    return regex.test(normalized);
+  });
+}
+
+// Per-user daily message cap for demo budget control
+const DAILY_MSG_CAP = 25;
+
+function getDailyMsgCount() {
+  const stored = JSON.parse(localStorage.getItem('manasthiti-phoenix-daily') || '{}');
+  const today = new Date().toISOString().slice(0, 10);
+  if (stored.date !== today) return 0;
+  return stored.count || 0;
+}
+
+function incrementDailyMsgCount() {
+  const today = new Date().toISOString().slice(0, 10);
+  const stored = JSON.parse(localStorage.getItem('manasthiti-phoenix-daily') || '{}');
+  const count = stored.date === today ? (stored.count || 0) + 1 : 1;
+  localStorage.setItem('manasthiti-phoenix-daily', JSON.stringify({ date: today, count }));
+  return count;
+}
+
 // Strict safety rails and personality tuning
 const SYSTEM_PROMPT = `You are Phoenix, a highly compassionate and empathetic mental health companion for youth in Nepal. Your primary goal is to help users get through tough times and uncertainty.
 RULES FOR PHOENIX:
@@ -44,11 +78,9 @@ function Chat() {
   const lastMsgTime = useRef(0);
   const messagesEndRef = useRef(null);
   const chatSessionRef = useRef(null);
-  const sessionInitialized = useRef(false);
+  const [sessionVersion, setSessionVersion] = useState(0);
 
   useEffect(() => {
-    // Only initialize the Gemini session once
-    if (sessionInitialized.current) return;
 
     try {
       if (!activeApiKey) {
@@ -82,28 +114,44 @@ function Chat() {
           temperature: 0.7,
         }
       });
-
-      sessionInitialized.current = true;
     } catch (error) {
       console.error('Failed to initialize Gemini:', error);
     }
-  }, [activeApiKey]);
+  }, [activeApiKey, sessionVersion]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const [offensiveWarning, setOffensiveWarning] = useState(false);
+  const [capReached, setCapReached] = useState(false);
+
   const handleSend = async () => {
     if (!input.trim() || isTyping) return;
 
-    // Strict Rate Limiter: Prevent spamming over 3 seconds or sending while it types
+    // Rate limit: 10 seconds between messages for demo budget
     const now = Date.now();
-    if (now - lastMsgTime.current < 3000) {
+    if (now - lastMsgTime.current < 10000) {
       setRateLimitWarning(true);
       setTimeout(() => setRateLimitWarning(false), 3000);
       return;
     }
+
+    // Offensive word filter
+    if (isOffensive(input)) {
+      setOffensiveWarning(true);
+      setTimeout(() => setOffensiveWarning(false), 4000);
+      return;
+    }
+
+    // Per-user daily message cap
+    if (getDailyMsgCount() >= DAILY_MSG_CAP) {
+      setCapReached(true);
+      return;
+    }
+
     lastMsgTime.current = now;
+    incrementDailyMsgCount();
 
     const userMsg = {
       id: Date.now(),
@@ -237,8 +285,9 @@ function Chat() {
         <button
           onClick={() => {
             localStorage.removeItem('manasthiti-phoenix-chat');
-            sessionInitialized.current = false;
             chatSessionRef.current = null;
+            setSessionVersion(v => v + 1);
+            setCapReached(false);
             setMessages([{
               id: Date.now(),
               sender: 'phoenix',
@@ -268,6 +317,16 @@ function Chat() {
              {isEn ? 'Please wait a moment before sending.' : 'कृपया केही सेकेन्ड पर्खनुहोस्।'}
            </div>
         )}
+        {offensiveWarning && (
+           <div style={{position:'absolute', top: 0, left: 0, right: 0, bottom: 0, background: '#B34A30', color: 'white', display:'flex', alignItems:'center', justifyContent:'center', borderRadius: '4px', fontWeight: 600, fontSize: '0.85rem', padding: '0 12px', textAlign: 'center'}}>
+             {isEn ? 'Please keep the conversation respectful.' : 'कृपया सम्मानजनक भाषा प्रयोग गर्नुहोस्।'}
+           </div>
+        )}
+        {capReached && (
+           <div style={{position:'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'var(--color-deep-indigo)', color: 'white', display:'flex', alignItems:'center', justifyContent:'center', borderRadius: '4px', fontWeight: 600, fontSize: '0.85rem', padding: '0 12px', textAlign: 'center'}}>
+             {isEn ? 'Daily message limit reached. Come back tomorrow!' : 'आजको सन्देश सीमा पुग्यो। भोलि फेरि आउनुहोस्!'}
+           </div>
+        )}
       </div>
 
       <div className="ai-chat-messages">
@@ -289,9 +348,14 @@ function Chat() {
                 </div>
               )}
               {msg.isCrisis && (
-                <a href="tel:1660-0102005" className="ai-crisis-btn" style={{marginTop:'8px', display:'block'}}>
-                  📞 TPO Nepal: 1660-0102005
-                </a>
+                <div style={{marginTop:'8px', display:'flex', flexDirection:'column', gap:'4px'}}>
+                  <a href="tel:1660-0102005" className="ai-crisis-btn" style={{display:'block'}}>
+                    📞 TPO Nepal: 1660-0102005
+                  </a>
+                  <a href="tel:988" className="ai-crisis-btn" style={{display:'block'}}>
+                    📞 988 Suicide & Crisis Lifeline (US)
+                  </a>
+                </div>
               )}
               <span className="ai-msg-time">{msg.time}</span>
             </div>

@@ -58,13 +58,14 @@ function Questionnaire() {
          if (ans && typeof ans.score === 'number') total += ans.score;
       });
 
-      supabase.auth.getUser().then(({ data: { user } }) => {
+      supabase.auth.getUser().then(({ data }) => {
+        const user = data?.user;
         if (user) {
           supabase.from('user_checkins').insert([{ stress_score: total, user_id: user.id }]).then(({ error }) => {
             if (error) console.error('Supabase logging error:', error);
           });
         }
-      });
+      }).catch(err => console.error('Failed to log score:', err));
 
       navigate('/solidarity');
     }

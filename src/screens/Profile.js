@@ -19,8 +19,8 @@ function Profile() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      setUser(user);
+      const { data } = await supabase.auth.getUser();
+      setUser(data?.user || null);
       setLoading(false);
     };
     fetchUser();
@@ -32,12 +32,13 @@ function Profile() {
     setStatusMsg('');
     setStatusIsSuccess(false);
     try {
-      const { data, error } = await supabase.auth.updateUser({
-        email: email,
-        password: password
-      });
+      // Step 1: Link email (this may send a confirmation email depending on Supabase settings)
+      const { error: emailError } = await supabase.auth.updateUser({ email });
+      if (emailError) throw emailError;
 
-      if (error) throw error;
+      // Step 2: Set password separately — works even if email confirmation is pending
+      const { data, error: pwError } = await supabase.auth.updateUser({ password });
+      if (pwError) throw pwError;
 
       setStatusIsSuccess(true);
       setStatusMsg(t('nav.accountUpgraded'));
@@ -53,7 +54,7 @@ function Profile() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    navigate('/');
+    navigate('/home');
   };
 
   if (loading) return <div className="screen-with-nav" style={{textAlign:'center', padding:'3rem'}}>{isEn ? 'Loading...' : 'लोड हुँदैछ...'}</div>;
