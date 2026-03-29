@@ -80,43 +80,63 @@ function Chat() {
   const chatSessionRef = useRef(null);
   const [sessionVersion, setSessionVersion] = useState(0);
 
+  const [initError, setInitError] = useState('');
+
   useEffect(() => {
+    const initSession = async () => {
+      try {
+        setInitError('');
 
-    try {
-      if (!activeApiKey) {
-        console.warn('Gemini API Key is missing. Chat will not function fully.');
-        return;
+        if (!activeApiKey) {
+          setInitError('API key missing');
+          console.warn('Gemini API Key is missing. Add REACT_APP_GEMINI_API_KEY to env.');
+          return;
+        }
+
+        const genAI = new GoogleGenerativeAI(activeApiKey);
+        const model = genAI.getGenerativeModel({
+          model: "gemini-1.5-flash",
+          systemInstruction: SYSTEM_PROMPT
+        });
+
+        const storedHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
+
+        // Only include real conversation messages — skip greetings, errors
+        const geminiHistory = storedHistory
+          .filter(msg => !msg.isGreeting && !msg.isError && msg.text && msg.text.trim().length > 0)
+          .map(msg => ({
+            role: msg.sender === 'user' ? 'user' : 'model',
+            parts: [{ text: msg.text }]
+          }))
+          // Gemini requires history to start with 'user' and alternate roles
+          .reduce((acc, msg) => {
+            if (acc.length === 0 && msg.role !== 'user') return acc;
+            if (acc.length > 0 && acc[acc.length - 1].role === msg.role) return acc;
+            acc.push(msg);
+            return acc;
+          }, []);
+
+        // Ensure history has even length (pairs of user/model)
+        if (geminiHistory.length % 2 !== 0) {
+          geminiHistory.pop();
+        }
+
+        chatSessionRef.current = model.startChat({
+          history: geminiHistory,
+          generationConfig: {
+            maxOutputTokens: 250,
+            temperature: 0.7,
+          }
+        });
+
+        console.log('Gemini session initialized successfully.');
+      } catch (error) {
+        console.error('Failed to initialize Gemini:', error);
+        setInitError(error.message || 'Unknown init error');
       }
+    };
 
-      const genAI = new GoogleGenerativeAI(activeApiKey);
-      const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
-        systemInstruction: {
-          role: "system",
-          parts: [{ text: SYSTEM_PROMPT }]
-        }
-      });
-
-      const storedHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
-
-      // Only include actual conversation messages in Gemini history (skip greeting)
-      const geminiHistory = storedHistory
-        .filter(msg => !msg.isGreeting)
-        .map(msg => ({
-          role: msg.sender === 'user' ? 'user' : 'model',
-          parts: [{ text: msg.text }]
-        }));
-
-      chatSessionRef.current = model.startChat({
-        history: geminiHistory,
-        generationConfig: {
-          maxOutputTokens: 250,
-          temperature: 0.7,
-        }
-      });
-    } catch (error) {
-      console.error('Failed to initialize Gemini:', error);
-    }
+    initSession();
   }, [activeApiKey, sessionVersion]);
 
   useEffect(() => {
@@ -170,8 +190,11 @@ function Chat() {
     setRateLimitWarning(false);
 
     try {
-      if (!activeApiKey || !chatSessionRef.current) {
-        throw new Error("Missing Gemini API Key or Session not initialized");
+      if (!activeApiKey) {
+        throw new Error("REACT_APP_GEMINI_API_KEY is not set. Add it to Vercel Environment Variables and redeploy.");
+      }
+      if (!chatSessionRef.current) {
+        throw new Error(initError || "Gemini session failed to initialize. Check your API key validity.");
       }
       
       let responseText = '';
@@ -187,12 +210,18 @@ function Chat() {
           console.warn("Primary key failed. Switching to backup...");
 
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: SYSTEM_PROMPT });
 
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory
-            .filter(msg => !msg.isGreeting)
-            .map(msg => ({ role: msg.sender === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }));
+            .filter(msg => !msg.isGreeting && !msg.isError && msg.text && msg.text.trim().length > 0)
+            .map(msg => ({ role: msg.sender === 'user' ? 'user' : 'model', parts: [{ text: msg.text }] }))
+            .reduce((acc, msg) => {
+              if (acc.length === 0 && msg.role !== 'user') return acc;
+              if (acc.length > 0 && acc[acc.length - 1].role === msg.role) return acc;
+              acc.push(msg);
+              return acc;
+            }, []);
 
           const backupSession = backupModel.startChat({ history: backupHistory, generationConfig: { maxOutputTokens: 250, temperature: 0.7 }});
           const backupResult = await backupSession.sendMessage(promptText);
@@ -221,10 +250,13 @@ function Chat() {
       });
     } catch (error) {
       console.error('Gemini API Error:', error);
+      const debugHint = error.message || '';
       const errorMsg = {
         id: Date.now() + 1,
         sender: 'phoenix',
-        text: isEn ? "I am having trouble connecting to my service right now. Please try again in a moment." : "अहिले प्रणालीमा केही समस्या छ। कृपया केहीछिन पछि प्रयास गर्नुहोस्।",
+        text: isEn
+          ? `I am having trouble connecting right now. (${debugHint})`
+          : `अहिले प्रणालीमा समस्या छ। (${debugHint})`,
         time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false }),
         isError: true
       };
