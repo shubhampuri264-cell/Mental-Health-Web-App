@@ -1,79 +1,49 @@
-# Manasthiti: Mental Health Platform
+# Manasthiti
+> A bilingual, AI-powered mental health companion and crisis platform
 
-## Overview
-Manasthiti (meaning State of Mind in Nepali) is a comprehensive mental health web application designed to provide immediate psychological first aid and community support. The platform is built to be universally accessible, offering full bilingual support in English and Nepali. 
+Manasthiti (meaning State of Mind in Nepali) is a comprehensive mental health web application designed to provide immediate psychological first aid and anonymous community support. The platform is universally accessible, offering seamless bilingual support in English and Nepali. 
 
-It balances user privacy with personalized care by allowing users to access all features completely anonymously, with the optional ability to create a secure account to save their progress across devices.
+It balances absolute user privacy with personalized care by allowing users to access all features completely anonymously, with the data heavily protected by Row Level Security (RLS).
 
-## What It Does the Core Features
+---
+
+## Core Features
 
 ### 1. Phoenix AI Companion
-An intelligent conversational assistant tuned specifically for crisis de-escalation and cognitive behavioral therapy techniques. 
-- Users can type or speak directly to Phoenix using their microphone.
-- The AI provides structured, empathetic, and highly readable guidance to help users navigate tough moments.
+An intelligent conversational assistant tuned specifically for crisis de-escalation, empathy, and cognitive behavioral therapy techniques. 
+- **Voice-to-Text**: Users can type or speak directly to Phoenix using native browser speech recognition.
+- **Graceful Degradation**: Phoenix employs strict rate-limiting and custom modals to gracefully handle API Quota limits without crashing, ensuring a safe experience during a crisis.
+- **Dynamic Failover**: Seamlessly switches to backup proxy models (like `gemini-1.5-flash-8b`) if primary rate limits are actively exhausted.
 
 ### 2. Anonymous Support Groups
 A real-time community forum where users can connect with others facing similar challenges.
-- Conversations happen instantly without the need to refresh the page.
-- The platform uses automated filters to block toxic or abusive language, ensuring a safe and supportive space.
-- Accurate live counters show exactly how many people are online in a room at any given moment.
+- **Live Sync**: Conversations happen instantly via WebSockets without page reloads.
+- **Safe Spaces**: Automated filters block toxic or abusive language, ensuring a welcoming environment.
+- **Active Presence**: Accurate live counters show precisely how many people are online in a room at any given moment.
 
 ### 3. Mood Tracking Dashboard
-Users can take a quick daily assessment to calculate their current stress levels.
+Users can take a quick daily assessment to calculate their emotional weight and stress levels.
 - Results are securely saved and plotted on an interactive, visual line graph.
-- This helps users track their mental health trends over time to identify what triggers their stress.
+- Helps users track their mental health trends over time to identify what triggers their stress.
 
 ### 4. Interactive Resource Library
-A collection of self-help tools focused on grounding and relaxation.
-- Includes a built-in audio player for streaming guided breathing exercises and meditation sessions.
+A beautiful, static-fallback architecture housing self-help tools focused on grounding and relaxation.
+- **Emergency Helplines**: High-contrast, immediate fast-dial buttons for the US 988 Suicide Lifeline and Nepal TUTH Helplines.
 - Features interactive journaling prompts configured to stay entirely private to the user's local device.
 
 ---
 
-## Technical Architecture
+## Technical Architecture & Performance
 
-### Frontend
-- React.js: Powers the user interface and fast client-side routing.
-- Recharts: Renders the dynamic data visualizations for mood tracking.
-- i18next: Manages the seamless, real-time translation toggling between English and Nepali without page reloads.
-- Web Speech API: Integrates native browser voice-to-text accessibility.
+Manasthiti has been heavily optimized for maximum speed and minimal bandwidth on mobile devices:
 
-### Backend and Infrastructure
-- Supabase : Serves as the primary database, ensuring high availability and secure data warehousing.
-- Supabase Realtime: Powers the live community chatting features and active user presence tracking via WebSockets.
-- Hybrid Authentication: The application automatically provisions a secure, anonymous session token on the user's first visit. This secures their data instantly via database constraints. Users can later link an email address to permanently save their profile.
-
-### Artificial Intelligence
-- Google Gemini 1.5 Flash SDK: Drives the logic and empathy of the Phoenix Chatbot. 
-- The integration includes a built-in dynamic failover mechanism to seamlessly switch to a backup API key if primary rate limits are reached, preventing the UI from crashing during a crisis.
-
----
-
-## Installation and Setup
-
-To run Manasthiti on your local machine:
-
-1. Clone the repository and install dependencies:
-```bash
-git clone https://github.com/shubhampuri264-cell/Mental-Health-Web-App.git
-cd "Mental Health Web App"/manasthiti
-npm install
-```
-
-2. Set up environment variables:
-Create a file named `.env` in the root of the project and add your API keys:
-```env
-REACT_APP_SUPABASE_URL=your_supabase_url
-REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
-REACT_APP_GEMINI_API_KEY=your_primary_gemini_key
-REACT_APP_GEMINI_API_KEY_BACKUP=your_backup_gemini_key
-```
-
-3. Start the application:
-```bash
-npm start
-```
-The app will launch at http://localhost:3000.
+- **Aggressive Code Splitting**: The entire application uses `React.lazy()` and `<Suspense>`, dynamically breaking down the massive JavaScript bundle. Users download *only* the screen they are currently viewing, making the initial "Time to Interactive" nearly instant.
+- **Vercel Edge Caching**: A customized `vercel.json` intercepts all static asset requests, appending `Cache-Control: public, max-age=31536000, immutable` headers. This pushes the frontend directly to Vercel's Edge CDN worldwide.
+- **i18next**: Manages the seamless, real-time translation toggling between English and Nepali without expensive server roundtrips.
+- **Google Gemini 2.0 Flash**: Drives the logic and empathy of the Phoenix Chatbot at blisteringly fast speeds.
 
 ## Security and Privacy
-Manasthiti uses strict Row Level Security on its databases. By assigning anonymous authentication tokens to all visitors automatically, the platform actively blocks automated bots and malicious scrapers from accessing or altering the community data APIs.
+Manasthiti uses strict Row Level Security (RLS) on its databases. By assigning anonymous authentication tokens to all visitors automatically upon arrival, the platform actively blocks automated bots and malicious scrapers from accessing or altering the community data APIs, while guaranteeing user privacy.
+
+## Website URL Deployed on vercel
+https://mental-health-web-app-delta.vercel.app/
