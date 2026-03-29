@@ -11,7 +11,7 @@ import '../styles/Questionnaire.css';
 const DEVANAGARI_NUMERALS = ['०१', '०२', '०३', '०४', '०५', '०६', '०७', '०८', '०९', '१०'];
 
 function Questionnaire() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -84,11 +84,17 @@ function Questionnaire() {
 
   return (
     <div className="questionnaire-screen">
-      <div className="questionnaire-top">
+      <div className="questionnaire-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <button className="q-back-button" onClick={handleBack}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
+        </button>
+        <button 
+          onClick={() => navigate('/home')}
+          style={{ background: 'none', border: 'none', color: '#DE6B48', fontWeight: '600', fontSize: '0.9rem', cursor: 'pointer', fontFamily: 'var(--font-body-en)' }}
+        >
+          {i18n.language === 'en' ? 'Skip' : 'छोड्नुहोस्'}
         </button>
       </div>
       <ProgressBar current={currentIndex + 1} total={totalQuestions} />
