@@ -95,7 +95,7 @@ function Chat() {
 
         const genAI = new GoogleGenerativeAI(activeApiKey);
         const model = genAI.getGenerativeModel({
-          model: "gemini-2.0-flash",
+          model: "gemini-1.5-flash-8b",
           systemInstruction: SYSTEM_PROMPT
         });
 
@@ -210,7 +210,7 @@ function Chat() {
           console.warn("Primary key failed. Switching to backup...");
 
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: SYSTEM_PROMPT });
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash-8b", systemInstruction: SYSTEM_PROMPT });
 
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory
@@ -251,12 +251,21 @@ function Chat() {
     } catch (error) {
       console.error('Gemini API Error:', error);
       const debugHint = error.message || '';
+      
+      let userMessage = isEn
+        ? `I am having trouble connecting right now. (${debugHint})`
+        : `अहिले प्रणालीमा समस्या छ। (${debugHint})`;
+        
+      if (debugHint.includes('429') || debugHint.includes('quota') || debugHint.includes('exceeded')) {
+        userMessage = isEn
+          ? "Phoenix is catching its breath! ⏳ We've temporarily reached our free API limit. Please wait about 60 seconds before sending another message."
+          : "फिनिक्सले आराम गरिरहेको छ! ⏳ हाम्रो अहिलेको सन्देश सीमा सकिएको छ। अर्को सन्देश पठाउनु अघि कृपया ६० सेकेन्ड पर्खनुहोस्।";
+      }
+
       const errorMsg = {
         id: Date.now() + 1,
         sender: 'phoenix',
-        text: isEn
-          ? `I am having trouble connecting right now. (${debugHint})`
-          : `अहिले प्रणालीमा समस्या छ। (${debugHint})`,
+        text: userMessage,
         time: new Date().toLocaleTimeString('en', { hour: '2-digit', minute: '2-digit', hour12: false }),
         isError: true
       };
