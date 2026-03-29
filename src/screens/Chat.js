@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { BottomNav } from '../components/Navigation';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import ReactMarkdown from 'react-markdown';
+import { motion, AnimatePresence } from 'framer-motion';
 import '../styles/Chat.css';
 
 // Initialize Gemini API Keys (Strictly from Environment Variables for Security)
