@@ -5,9 +5,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import ReactMarkdown from 'react-markdown';
 import '../styles/Chat.css';
 
-// Initialize Gemini API Keys (Fallback to hardcoded for MVP deployment on Vercel)
-const API_KEY = process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyCSTvTtAYOPbQQj3JHA9XWlzs5ipTdiAYo';
-const API_KEY_BACKUP = process.env.REACT_APP_GEMINI_API_KEY_BACKUP || 'AIzaSyD35-XvqCEar8I2HTaPMq3SMARzFZoQe_k';
+// Initialize Gemini API Keys (Strictly from Environment Variables for Security)
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+const API_KEY_BACKUP = process.env.REACT_APP_GEMINI_API_KEY_BACKUP;
 
 // Offensive / toxic word filter (shared with SupportGroups)
 const OFFENSIVE_WORDS = [
