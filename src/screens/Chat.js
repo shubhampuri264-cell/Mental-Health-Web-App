@@ -72,6 +72,7 @@ function Chat() {
   const [rateLimitWarning, setRateLimitWarning] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [activeApiKey, setActiveApiKey] = useState(API_KEY || '');
+  const [quotaWarning, setQuotaWarning] = useState(false);
 
   const recognitionRef = useRef(null);
 
@@ -95,7 +96,7 @@ function Chat() {
 
         const genAI = new GoogleGenerativeAI(activeApiKey);
         const model = genAI.getGenerativeModel({
-          model: "gemini-1.5-pro",
+          model: "gemini-2.0-flash",
           systemInstruction: SYSTEM_PROMPT
         });
 
@@ -210,7 +211,7 @@ function Chat() {
           console.warn("Primary key failed. Switching to backup...");
 
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-pro", systemInstruction: SYSTEM_PROMPT });
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: SYSTEM_PROMPT });
 
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory
@@ -252,15 +253,14 @@ function Chat() {
       console.error('Gemini API Error:', error);
       const debugHint = error.message || '';
       
+      if (debugHint.includes('429') || debugHint.includes('quota') || debugHint.includes('exceeded') || debugHint.includes('limit')) {
+        setQuotaWarning(true);
+        return; // Don't append a broken message
+      }
+
       let userMessage = isEn
         ? `I am having trouble connecting right now. (${debugHint})`
         : `अहिले प्रणालीमा समस्या छ। (${debugHint})`;
-        
-      if (debugHint.includes('429') || debugHint.includes('quota') || debugHint.includes('exceeded')) {
-        userMessage = isEn
-          ? "Phoenix is catching its breath! ⏳ We've temporarily reached our free API limit. Please wait about 60 seconds before sending another message."
-          : "फिनिक्सले आराम गरिरहेको छ! ⏳ हाम्रो अहिलेको सन्देश सीमा सकिएको छ। अर्को सन्देश पठाउनु अघि कृपया ६० सेकेन्ड पर्खनुहोस्।";
-      }
 
       const errorMsg = {
         id: Date.now() + 1,
@@ -309,7 +309,47 @@ function Chat() {
   };
 
   return (
-    <div className="ai-chat-screen">
+    <div className="ai-chat-screen" style={{ position: 'relative' }}>
+      
+      {/* SEPARATE QUOTA EXCEEDED MODAL OVERLAY */}
+      <AnimatePresence>
+        {quotaWarning && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(27, 31, 94, 0.7)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 9999, padding: '24px', backdropFilter: 'blur(4px)' }}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              style={{ background: 'white', padding: '32px 24px', borderRadius: '24px', textAlign: 'center', maxWidth: '340px', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}
+            >
+              <div style={{ fontSize: '3rem', marginBottom: '16px' }}>⏳</div>
+              <h3 style={{ color: 'var(--color-deep-indigo)', marginBottom: '12px', fontFamily: 'var(--font-body-en)', fontSize: '1.4rem' }}>
+                {isEn ? 'Catching our breath!' : 'सहज हुँदैछ!'}
+              </h3>
+              <p style={{ color: 'var(--color-charcoal)', fontSize: '0.95rem', marginBottom: '24px', lineHeight: '1.5' }}>
+                {isEn 
+                  ? 'We have temporarily reached our free API messaging limit for Phoenix.' 
+                  : 'हामीले अहिलेको लागि फिनिक्सको सन्देश सीमा पार गरेका छौं।'}
+                <br/><br/>
+                {isEn
+                  ? 'Please wait exactly 60 seconds before trying to send another message.'
+                  : 'अर्को सन्देश पठाउनु अघि कृपया ६० सेकेन्ड पर्खनुहोस्।'}
+              </p>
+              <button 
+                onClick={() => setQuotaWarning(false)}
+                style={{ backgroundColor: 'var(--color-warm-terracotta)', color: 'white', border: 'none', padding: '14px 24px', borderRadius: '12px', fontWeight: 'bold', width: '100%', cursor: 'pointer', fontSize: '1rem', transition: 'all 0.2s ease' }}
+              >
+                {isEn ? 'Got it! I will wait' : 'बुझें! म पर्खन्छु'}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="ai-chat-header">
         <div className="phoenix-avatar">
           <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
