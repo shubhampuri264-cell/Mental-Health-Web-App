@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Landing from './screens/Landing';
+import ErrorBoundary from './components/ErrorBoundary';
+import { supabase } from './supabaseClient';
+import './i18n';
+import './styles/design-tokens.css';
 
 // Lazy loading the rest of the app to drastically shrink initial load time
 const Home = React.lazy(() => import('./screens/Home'));
@@ -13,11 +17,6 @@ const SupportGroups = React.lazy(() => import('./screens/SupportGroups'));
 const Chat = React.lazy(() => import('./screens/Chat'));
 const Library = React.lazy(() => import('./screens/Library'));
 const Profile = React.lazy(() => import('./screens/Profile'));
-
-import ErrorBoundary from './components/ErrorBoundary';
-import { supabase } from './supabaseClient';
-import './i18n';
-import './styles/design-tokens.css';
 
 function App() {
   const { i18n } = useTranslation();
