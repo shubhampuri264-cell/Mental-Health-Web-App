@@ -98,10 +98,7 @@ export function getSolidarityCount(cohort) {
     lowMood: 4200,
   };
 
-  const base = baseCounts[cohort] || 5000;
-  // Add some daily variance (±15%) to feel real
-  const variance = Math.floor(base * 0.15 * (Math.random() * 2 - 1));
-  return base + variance;
+  return baseCounts[cohort] || 5000;
 }
 
 // Determine which questions to show based on branching logic

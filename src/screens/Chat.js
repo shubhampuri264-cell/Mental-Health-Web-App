@@ -5,9 +5,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import ReactMarkdown from 'react-markdown';
 import '../styles/Chat.css';
 
-// Initialize Gemini API Keys
-const API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-const API_KEY_BACKUP = process.env.REACT_APP_GEMINI_API_KEY_BACKUP;
+// Initialize Gemini API Keys (Fallback to hardcoded for MVP deployment on Vercel)
+const API_KEY = process.env.REACT_APP_GEMINI_API_KEY || 'AIzaSyCSTvTtAYOPbQQj3JHA9XWlzs5ipTdiAYo';
+const API_KEY_BACKUP = process.env.REACT_APP_GEMINI_API_KEY_BACKUP || 'AIzaSyD35-XvqCEar8I2HTaPMq3SMARzFZoQe_k';
 
 // Offensive / toxic word filter (shared with SupportGroups)
 const OFFENSIVE_WORDS = [
@@ -26,7 +26,7 @@ function isOffensive(text) {
 }
 
 // Per-user daily message cap for demo budget control
-const DAILY_MSG_CAP = 25;
+const DAILY_MSG_CAP = 10;
 
 function getDailyMsgCount() {
   const stored = JSON.parse(localStorage.getItem('manasthiti-phoenix-daily') || '{}');
@@ -90,7 +90,7 @@ function Chat() {
 
       const genAI = new GoogleGenerativeAI(activeApiKey);
       const model = genAI.getGenerativeModel({
-        model: "gemini-2.0-flash",
+        model: "gemini-1.5-flash",
         systemInstruction: {
           role: "system",
           parts: [{ text: SYSTEM_PROMPT }]
@@ -187,7 +187,7 @@ function Chat() {
           console.warn("Primary key failed. Switching to backup...");
 
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: { role: "system", parts: [{ text: SYSTEM_PROMPT }] }});
 
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageToggle from './LanguageToggle';
 import '../styles/Navigation.css';
 
-function TopBar({ title, titleEn, showBack = true }) {
+function TopBar({ title, titleEn, showBack = true, onBack }) {
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   const isEn = i18n.language === 'en';
@@ -12,7 +12,7 @@ function TopBar({ title, titleEn, showBack = true }) {
   return (
     <div className="top-bar">
       {showBack && (
-        <button className="back-button" onClick={() => navigate(-1)} aria-label="Go back">
+        <button className="back-button" onClick={onBack ? onBack : () => navigate(-1)} aria-label="Go back">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>

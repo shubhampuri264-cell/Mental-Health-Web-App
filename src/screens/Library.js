@@ -7,6 +7,96 @@ import '../styles/Library.css';
 
 import { supabase } from '../supabaseClient';
 
+const staticLibraryData = [
+  {
+    id: 'pmr',
+    category: 'exercise',
+    title_en: 'Progressive Muscle Relaxation',
+    title_ne: 'मांसपेशी विश्राम अभ्यास',
+    icon: '💪',
+    content: {
+      stepsEn: [
+        "Find a quiet place and sit comfortably.",
+        "Take a deep breath and close your eyes.",
+        "Tense the muscles in your toes for 5 seconds.",
+        "Release and relax for 10 seconds.",
+        "Move up to your calves, tense and release.",
+        "Continue moving up your body (legs, stomach, hands, face)."
+      ],
+      stepsNe: [
+        "शान्त ठाउँमा बस्नुहोस् र आँखा बन्द गर्नुहोस्।",
+        "गहिरो सास लिनुहोस्।",
+        "५ सेकेन्डसम्म आफ्नो खुट्टाको औंला कडा पार्नुहोस्।",
+        "१० सेकेन्डको लागि छोड्नुहोस् र आराम महसुस गर्नुहोस्।",
+        "यसैगरी पिँडुला, तिघ्रा, पेट र अनुहारमा दोहोर्याउनुहोस्।"
+      ]
+    }
+  },
+  {
+    id: 'box_breathing',
+    category: 'exercise',
+    title_en: 'Box Breathing',
+    title_ne: 'बक्स ब्रिदिङ',
+    icon: '🔲',
+    content: {
+      stepsEn: [
+        "Exhale completely to the count of 4.",
+        "Hold your lungs empty for a 4-count.",
+        "Inhale deeply through your nose to the count of 4.",
+        "Hold the air in your lungs for a 4-count.",
+        "Repeat this pattern for 3-5 minutes."
+      ],
+      stepsNe: [
+        "४ गन्दासम्म सास बाहिर फाल्नुहोस्।",
+        "४ गन्दासम्म सास रोक्नुहोस्।",
+        "४ गन्दासम्म भित्र सास लिनुहोस्।",
+        "४ गन्दासम्म सास भित्र होल्ड गर्नुहोस्।",
+        "३-५ मिनेटसम्म दोहोर्याउनुहोस्।"
+      ]
+    }
+  },
+  {
+    id: 'gratitude_journal',
+    category: 'journal',
+    title_en: 'Gratitude Reflection',
+    title_ne: 'कृतज्ञता जर्नलिङ',
+    icon: '🌅',
+    content: {
+      promptsEn: [
+        "What are three things that went well today?",
+        "Who are you thankful for and why?",
+        "What is a simple pleasure you enjoyed recently?",
+        "Name a challenge you overcame."
+      ],
+      promptsNe: [
+        "आज राम्रो भएका तीन कुराहरू के हुन्?",
+        "तपाईं कोप्रति आभारी हुनुहुन्छ?",
+        "तपाईंले भर्खरै रमाइलो मानेको सानो कुरा के हो?",
+        "तपाईंले पार गरेको एउटा चुनौती लेख्नुहोस्।"
+      ]
+    }
+  },
+  {
+    id: 'cognitive_distortion',
+    category: 'learn',
+    title_en: 'Common Thinking Traps',
+    title_ne: 'सोचका त्रुटिहरू',
+    icon: '🧠',
+    content: {
+      sectionsEn: [
+        { title: "All-or-Nothing Thinking", body: "Seeing things in black and white. Total success or total failure." },
+        { title: "Overgeneralization", body: "Seeing a single negative event as a never-ending pattern." },
+        { title: "Jumping to Conclusions", body: "Assuming the worst without facts." }
+      ],
+      sectionsNe: [
+        { title: "कालो वा सेतो सोच", body: "कुराहरूलाई पूर्ण सफलता वा पूर्ण विफलताको रूपमा मात्र हेर्ने।" },
+        { title: "अति सामान्यीकरण", body: "एउटा सानो घटनालाई सँधै हुने कुरा जस्तो मान्ने।" },
+        { title: "निष्कर्षमा हतारिनु", body: "प्रमाण बिना नै नराम्रो हुन्छ भनेर मान्नु।" }
+      ]
+    }
+  }
+];
+
 function Library() {
   const { t, i18n } = useTranslation();
   const isEn = i18n.language === 'en';
@@ -33,16 +123,24 @@ function Library() {
           .select('*');
 
         if (cancelled) return;
-        if (error) throw error;
+        if (error) {
+          console.error(error);
+          setLibraryContent(staticLibraryData);
+        } else {
+          // Merge dynamic and static to make it feel robust
+          const existingIds = new Set(data.map(d => d.id));
+          const uniqueStatic = staticLibraryData.filter(sd => !existingIds.has(sd.id));
+          setLibraryContent([...uniqueStatic, ...data]);
+        }
 
         clearTimeout(timeoutId);
-        setLibraryContent(data || []);
         setConnectionError(false);
       } catch (err) {
         if (cancelled) return;
         console.error('Error fetching library from Supabase:', err);
         clearTimeout(timeoutId);
-        setConnectionError(true);
+        setLibraryContent(staticLibraryData); // fallback
+        setConnectionError(false); // set false to show static resources
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -58,7 +156,7 @@ function Library() {
   if (selectedItem === 'breathing') {
     return (
       <div className="library-detail-screen screen-with-nav">
-        <TopBar title={t('nav.breathingExercise')} titleEn={t('nav.breathingExercise')} />
+        <TopBar title={t('nav.breathingExercise')} titleEn={t('nav.breathingExercise')} onBack={() => setSelectedItem(null)} />
         <BreathingExercise onClose={() => setSelectedItem(null)} />
         <BottomNav />
       </div>
@@ -71,7 +169,7 @@ function Library() {
 
     return (
       <div className="library-detail-screen screen-with-nav">
-        <TopBar title={isEn ? item.title_en : item.title_ne} titleEn={isEn ? item.title_en : item.title_ne} />
+        <TopBar title={isEn ? item.title_en : item.title_ne} titleEn={isEn ? item.title_en : item.title_ne} onBack={() => setSelectedItem(null)} />
 
         <div className="library-detail-content">
           <div className="detail-header">
@@ -201,6 +299,39 @@ function Library() {
           </div>
         ) : (
           <>
+            <div className="emergency-hotlines-card">
+              <div className="emergency-header">
+                <span className="emergency-icon">🚨</span>
+                <h3 className="emergency-title">{isEn ? 'Emergency Helplines' : 'आपतकालीन हेल्पलाइनहरू'}</h3>
+              </div>
+              <p className="emergency-desc">
+                {isEn ? 'If you or someone you know is in immediate danger, please reach out to these free, confidential resources:' : 'यदि तपाईं वा तपाईंले चिनेको कोही व्यक्ति संकटमा हुनुहुन्छ भने तल दिइएको नम्बरहरूमा सम्पर्क गर्नुहोस्:'}
+              </p>
+              <div className="hotline-links">
+                <a href="tel:988" className="hotline-item">
+                  <div className="hotline-desc-block">
+                    <span className="hotline-name">US Suicide & Crisis Lifeline</span>
+                    <span className="hotline-sub">Available 24/7, English & Spanish</span>
+                  </div>
+                  <span className="hotline-number">Call 988</span>
+                </a>
+                <a href="sms:741741" className="hotline-item">
+                  <div className="hotline-desc-block">
+                    <span className="hotline-name">US Crisis Text Line</span>
+                    <span className="hotline-sub">Available 24/7</span>
+                  </div>
+                  <span className="hotline-number">Text HOME to 741741</span>
+                </a>
+                <a href="tel:16600102005" className="hotline-item">
+                  <div className="hotline-desc-block">
+                    <span className="hotline-name">Nepal TUTH Suicide Hotline</span>
+                    <span className="hotline-sub">T.U. Teaching Hospital</span>
+                  </div>
+                  <span className="hotline-number">1660-010-2005</span>
+                </a>
+              </div>
+            </div>
+
             <h3 className="lib-cat-title-ne">{isEn ? 'Exercises' : 'अभ्यासहरू'}</h3>
             <div className="library-grid">
               {libraryContent.filter(i => i.category === 'exercise').map((item) => (

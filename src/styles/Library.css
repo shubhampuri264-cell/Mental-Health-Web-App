@@ -319,3 +319,89 @@
   font-size: var(--text-small);
   color: var(--color-muted-gray);
 }
+
+/* Emergency Hotlines */
+.emergency-hotlines-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  margin-bottom: var(--space-md);
+  margin-top: var(--space-md);
+  border: 2px solid var(--color-warm-terracotta);
+  box-shadow: 0 4px 12px rgba(222, 107, 72, 0.15);
+}
+
+.emergency-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.emergency-icon {
+  font-size: 1.5rem;
+}
+
+.emergency-title {
+  font-family: var(--font-body-ne);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-warm-terracotta);
+}
+
+.emergency-desc {
+  font-family: var(--font-body-ne);
+  font-size: 0.9rem;
+  color: var(--color-charcoal);
+  margin-bottom: var(--space-md);
+  line-height: 1.4;
+}
+
+.hotline-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.hotline-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  border: 1px solid rgba(222, 107, 72, 0.2);
+  transition: all var(--transition-fast);
+}
+
+.hotline-item:hover {
+  background: rgba(222, 107, 72, 0.05);
+  border-color: var(--color-warm-terracotta);
+}
+
+.hotline-desc-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.hotline-name {
+  font-family: var(--font-body-ne);
+  font-weight: 600;
+  color: var(--color-deep-indigo);
+  font-size: 0.9rem;
+}
+
+.hotline-sub {
+  font-family: var(--font-body-en);
+  font-size: 0.75rem;
+  color: var(--color-muted-gray);
+  margin-top: 2px;
+}
+
+.hotline-number {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--color-warm-terracotta);
+  font-size: 1rem;
+}

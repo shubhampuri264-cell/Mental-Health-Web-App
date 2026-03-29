@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { calculateScore, getSolidarityCount } from '../utils/scoring';
+import { supabase } from '../supabaseClient';
 import '../styles/Solidarity.css';
 
 function Solidarity() {
@@ -23,14 +24,29 @@ function Solidarity() {
     const scoreResult = calculateScore(answers);
     setResult(scoreResult);
 
-    const count = getSolidarityCount(scoreResult.cohort);
-    setTargetCount(count);
-
-    // Store result for support tier screen
-    sessionStorage.setItem('manasthiti-result', JSON.stringify({
-      ...scoreResult,
-      solidarityCount: count,
-    }));
+    const baseCount = getSolidarityCount(scoreResult.cohort);
+    
+    // Fetch actual db checkins to add real data
+    const fetchRealData = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('user_checkins')
+          .select('*', { count: 'exact', head: true });
+        
+        const finalCount = baseCount + (error ? 0 : (count || 0));
+        setTargetCount(finalCount);
+        
+        // Store result for support tier screen
+        sessionStorage.setItem('manasthiti-result', JSON.stringify({
+          ...scoreResult,
+          solidarityCount: finalCount,
+        }));
+      } catch (err) {
+        setTargetCount(baseCount);
+      }
+    };
+    
+    fetchRealData();
 
     // Store in check-in history for mood tracking
     const history = JSON.parse(localStorage.getItem('manasthiti-history') || '[]');
