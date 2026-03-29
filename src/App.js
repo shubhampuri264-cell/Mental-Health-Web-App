@@ -29,8 +29,12 @@ function App() {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
+        if (!supabase) {
+          console.warn('Supabase not configured — running without auth.');
+          return;
+        }
+        const { data } = await supabase.auth.getSession();
+        if (!data?.session) {
           const { error } = await supabase.auth.signInAnonymously();
           if (error) {
             console.error('Anonymous auth failed. Please ensure "Anonymous Sign-Ins" is enabled in Supabase Authentication -> Providers:', error.message);
@@ -42,7 +46,14 @@ function App() {
         setAuthReady(true);
       }
     };
-    initAuth();
+
+    // Race: if Supabase takes longer than 5s, load the app anyway
+    const timeout = setTimeout(() => {
+      console.warn('Auth timed out — loading app without auth.');
+      setAuthReady(true);
+    }, 5000);
+
+    initAuth().then(() => clearTimeout(timeout));
   }, []);
 
   if (!authReady) {
