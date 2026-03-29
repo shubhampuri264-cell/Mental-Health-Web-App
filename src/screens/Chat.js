@@ -95,7 +95,7 @@ function Chat() {
 
         const genAI = new GoogleGenerativeAI(activeApiKey);
         const model = genAI.getGenerativeModel({
-          model: "gemini-1.5-flash",
+          model: "gemini-2.0-flash",
           systemInstruction: SYSTEM_PROMPT
         });
 
@@ -210,7 +210,7 @@ function Chat() {
           console.warn("Primary key failed. Switching to backup...");
 
           const backupGenAI = new GoogleGenerativeAI(API_KEY_BACKUP);
-          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-1.5-flash", systemInstruction: SYSTEM_PROMPT });
+          const backupModel = backupGenAI.getGenerativeModel({ model: "gemini-2.0-flash", systemInstruction: SYSTEM_PROMPT });
 
           const rawHistory = JSON.parse(localStorage.getItem('manasthiti-phoenix-chat') || '[]');
           const backupHistory = rawHistory
